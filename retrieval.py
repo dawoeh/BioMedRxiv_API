@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[35]:
+# In[1]:
 
 
 import re
@@ -10,11 +10,11 @@ from utils.utils import *
 import pandas as pd
 
 
-# In[22]:
+# In[2]:
 
 
 server = 'biorxiv'
-date_start = '2021-05-01'
+date_start = '2021-06-01'
 date_end = '2021-06-30'
 data_biorxiv = date_rxiv(server, date_start, date_end)
 data_biorxiv.drop_duplicates(subset = ['doi'], keep = 'last', inplace = True)
@@ -65,20 +65,13 @@ data_stats = biorxiv_stats()
 data_stats
 
 
-# In[27]:
-
-
-data_biorxiv.to_csv('processed/biorxiv_june.csv', index=False)
-data_medrxiv.to_csv('processed/medrxiv_june.csv', index=False)
-
-
 # In[9]:
 
 
 print(data_biorxiv.at[5, 'abstract'])
 
 
-# In[24]:
+# In[10]:
 
 
 first_words = set()
@@ -91,7 +84,6 @@ for i, abstract in enumerate(data_biorxiv['abstract'].tolist()):
         except:
             first = ''
         hits.append(re.findall(r'\w*[A-Z]\w*[A-Z]\w*', first))
-    #if hit:
     if sum([len(elem) for elem in hits]) > 0:
         for elem in hits:
             if len(elem) > 0:
@@ -99,40 +91,21 @@ for i, abstract in enumerate(data_biorxiv['abstract'].tolist()):
 print(first_words)
 
 
-# In[28]:
-
-
-term_list = ['Results', 'Contribution', 'Highlights', 'Background', 'Conclusions', 'Introduction', 'Motivation', 'Methods', 'Teaser',              'Abstracts', 'Conclusion', 'IMPORTANCE', 'SUMMARY', 'Finding', 'Availability', 'Highlight', 'Importance', 'Summary', 'RESULTS',             'Rationale', 'Aim', 'Significance', 'Objectives', 'Purpose', 'Synopsis', 'METHODS', 'SIGNIFICANCE', 'Objectives', 'Design',             'Objective', 'Approach', 'Methodology', 'HIGHLIGHTS', 'INTRODUCTION', 'Abstract', 'CONCLUSIONS', 'Software', 'Interpretations',             'FUNDING', 'Summery', 'Perspective', 'Discussion', 'CONCLUSION', 'DISCUSSION', 'Funding', 'Advances', 'Classification', 'SYNOPSIS',             'BACKGROUND', 'Method', 'Innovation', 'PREMISE', 'Implications', 'STATEMENT', 'Contact', 'Location', 'Outlook', 'TEASER',              'Interpretation', 'eTOC', 'Result', 'TABLE', 'Taxon', 'Measurements', 'Participants', 'Sentence', 'Materials',              'PURPOSE', 'Context', 'Setting', 'SUMMMARY', 'Hypothesis', 'Keypoitns', 'Implementation', 'Limitations', 'OBJECTIVE',              'Precis', 'Questions', 'Database',              'C_LIO_LI', 'O_LI', 'O_FIG_DISPLAY_L', 'O_SCPLOWBSTRACTC_SCPLOW', 'AO_SCPLOWUTHORC_SCPLOW', 'SO_SCPLOWUMMARYC_SCPLOW',             'C_TABLECAPTION', 'IO_SCPLOWMPORTANCEC_SCPLOW', 'C_LI', 'C_FIG_DISPLAY', 'C_TEXTBOX', 'O_SCPLOWLC_SCPLOW',             'SO_SCPLOWIGNIFICANCEC_SCPLOWO_SCPCAP', 'KO_SCPLOWEYC_SCPLOWO_SCPCAP', 'C_QD']
-for word in first_words:
-    present = 0
-    for term in term_list:
-        if term in word:
-            present = 1
-            break
-    if present == 0:
-        print(word)
-###FIND GRAPHICAL ABSTRACT AND REMOVE! Remove after ToC! Remove between O_FIG/O_TBL and C_FIG/C_TBL
-###AUTHOR STATEMENT, IMPACT STATEMENT, SIGNIFICANCE STATEMENT, DATA STATEMENT, ARTICLE SUMMARY, CONFLICT OF INTEREST, IN BRIEF, METHODOLOGY/PRINCIPAL FINDINGS
-##ABSTRACT AND KEYWORDS, PROGRAM SUMMARY, ARTICLE SUMMARY, NEW & NOTEWORTHY
-
-
-# In[85]:
+# In[36]:
 
 
 abstract_list = data_biorxiv['abstract'].tolist()
-print(abstract_list[4909])
+print(abstract_list[1999])
 
 
-# In[126]:
+# In[33]:
 
 
-abstract_list = data_biorxiv['abstract'].tolist()
+header_list = ['Results', 'Contribution', 'Highlights', 'Background', 'Conclusions', 'Introduction', 'Motivation', 'Methods', 'Teaser',             'Abstracts', 'Conclusion', 'IMPORTANCE', 'SUMMARY', 'Finding', 'Availability', 'Highlight', 'Importance', 'Summary', 'RESULTS',             'Rationale', 'Aim', 'Significance', 'Objectives', 'Purpose', 'Synopsis', 'METHODS', 'SIGNIFICANCE', 'Objectives', 'Design',             'Objective', 'Approach', 'Methodology', 'HIGHLIGHTS', 'INTRODUCTION', 'Abstract', 'CONCLUSIONS', 'Software', 'Interpretations',             'FUNDING', 'Summery', 'Perspective', 'Discussion', 'CONCLUSION', 'DISCUSSION', 'Funding', 'Advances', 'Classification', 'SYNOPSIS',             'BACKGROUND', 'Method', 'Innovation', 'PREMISE', 'Implications', 'STATEMENT', 'Contact', 'Location', 'Outlook', 'TEASER',             'Interpretation', 'eTOC', 'Result', 'TABLE', 'Taxon', 'Measurements', 'Participants', 'Sentence', 'Materials',             'PURPOSE', 'Context', 'Setting', 'SUMMMARY', 'Hypothesis', 'Keypoitns', 'Implementation', 'Limitations', 'OBJECTIVE',             'Precis', 'Questions', 'Database', 'Paragraph', 'PARAGRAPH', 'DECLARATIONS', 'ABSTRACT', 'Information']
 
-header_list = ['Results', 'Contribution', 'Highlights', 'Background', 'Conclusions', 'Introduction', 'Motivation', 'Methods', 'Teaser',              'Abstracts', 'Conclusion', 'IMPORTANCE', 'SUMMARY', 'Finding', 'Availability', 'Highlight', 'Importance', 'Summary', 'RESULTS',             'Rationale', 'Aim', 'Significance', 'Objectives', 'Purpose', 'Synopsis', 'METHODS', 'SIGNIFICANCE', 'Objectives', 'Design',             'Objective', 'Approach', 'Methodology', 'HIGHLIGHTS', 'INTRODUCTION', 'Abstract', 'CONCLUSIONS', 'Software', 'Interpretations',             'FUNDING', 'Summery', 'Perspective', 'Discussion', 'CONCLUSION', 'DISCUSSION', 'Funding', 'Advances', 'Classification', 'SYNOPSIS',             'BACKGROUND', 'Method', 'Innovation', 'PREMISE', 'Implications', 'STATEMENT', 'Contact', 'Location', 'Outlook', 'TEASER',              'Interpretation', 'eTOC', 'Result', 'TABLE', 'Taxon', 'Measurements', 'Participants', 'Sentence', 'Materials',              'PURPOSE', 'Context', 'Setting', 'SUMMMARY', 'Hypothesis', 'Keypoitns', 'Implementation', 'Limitations', 'OBJECTIVE',              'Precis', 'Questions', 'Database', 'Paragraph', 'PARAGRAPH']
+markup_list =  ['C_LIO_LI', 'O_LI', 'O_SCPLOWBSTRACTC_SCPLOW', 'AO_SCPLOWUTHORC_SCPLOW', 'SO_SCPLOWUMMARYC_SCPLOW', 'SO_SCPLOWIGNIFICANCEC_SCPLOWO_SCPCAP',                 'C_TABLECAPTION', 'IO_SCPLOWMPORTANCEC_SCPLOW', 'C_LI', 'C_TEXTBOX', 'O_SCPLOWLC_SCPLOW', 'C_SCPCAPO_SCPLOWPOINTSC_SCPLOW',                 'KO_SCPLOWEYC_SCPLOWO_SCPCAP', 'C_QD', 'C_ST_ABSO_LI', 'O_ST_ABS', 'C_ST_ABS', 'HO_SCPLOWIGHLIGHTSC_SCPLOW',                 'C_SCPCAPO_SCPLOWC_SCPLOW', 'O_TEXTBOX', 'O_SCPCAP']
 
-markup_list =  ['C_LIO_LI', 'O_LI', 'O_SCPLOWBSTRACTC_SCPLOW', 'AO_SCPLOWUTHORC_SCPLOW', 'SO_SCPLOWUMMARYC_SCPLOW', 'SO_SCPLOWIGNIFICANCEC_SCPLOWO_SCPCAP',             'C_TABLECAPTION', 'IO_SCPLOWMPORTANCEC_SCPLOW', 'C_LI', 'C_TEXTBOX', 'O_SCPLOWLC_SCPLOW', 'C_SCPCAPO_SCPLOWPOINTSC_SCPLOW',             'SO_SCPLOWIGNIFICANCEC_SCPLOWO_SCPCAP', 'KO_SCPLOWEYC_SCPLOWO_SCPCAP', 'C_QD', 'C_ST_ABSO_LI', 'O_ST_ABS', 'C_ST_ABS',                'C_SCPCAPO_SCPLOWPOINTSC_SCPLOW', 'SO_SCPLOWIGNIFICANCEC_SCPLOWO_SCPCAP', 'C_SCPCAPO_SCPLOWC_SCPLOW', 'O_TEXTBOX', 'O_SCPCAP']
-
-statement_list = ['AUTHOR STATEMENT', 'IMPACT STATEMENT', 'SIGNIFICANCE STATEMENT', 'DATA STATEMENT', 'ARTICLE SUMMARY',                   'CONFLICT OF INTEREST', 'IN BRIEF', 'METHODOLOGY/PRINCIPAL FINDINGS', 'ABSTRACT AND KEYWORDS', 'PROGRAM SUMMARY',                   'ARTICLE SUMMARY', 'NEW & NOTEWORTHY', 'Graphical abstract']
+statement_list = ['AUTHOR STATEMENT', 'IMPACT STATEMENT', 'SIGNIFICANCE STATEMENT', 'DATA STATEMENT', 'ARTICLE SUMMARY',                   'CONFLICT OF INTEREST', 'IN BRIEF', 'METHODOLOGY/PRINCIPAL FINDINGS', 'ABSTRACT AND KEYWORDS', 'PROGRAM SUMMARY',                   'ARTICLE SUMMARY', 'NEW & NOTEWORTHY', 'Graphical abstract', 'GRAPHICAL ABSTRACT', 'HIGHLIGHT STATEMENT']
 
 
 markup_list.sort(key = len, reverse=True)
@@ -172,10 +145,10 @@ for i, abstract in enumerate(abstract_list):
 
     abstract_list[i] = ' '.join(new_words)
     abstract_list
-print(abstract_list[4909])
+print(abstract_list[2000])
 
 
-# In[127]:
+# In[34]:
 
 
 first_words = set()
@@ -188,7 +161,6 @@ for i, abstract in enumerate(abstract_list):
         except:
             first = ''
         hits.append(re.findall(r'\w*[A-Z]\w*[A-Z]\w*', first))
-    #if hit:
     if sum([len(elem) for elem in hits]) > 0:
         for elem in hits:
             if len(elem) > 0:
@@ -205,10 +177,18 @@ for word in first_words:
         print(word)
 
 
-# In[121]:
+# In[35]:
 
 
 data_biorxiv_curate = data_biorxiv.copy()
 data_biorxiv_curate['abstract'] = abstract_list
+data_biorxiv.to_csv('processed/biorxiv_june.csv', index=False)
+data_medrxiv.to_csv('processed/medrxiv_june.csv', index=False)
 data_biorxiv_curate.to_csv('processed/biorxiv_june_curate.csv', index=False)
+
+
+# In[ ]:
+
+
+
 
