@@ -107,11 +107,14 @@ print(abstract_list[195])
 
 abstract_list = data_biorxiv['abstract'].tolist()
 
-header_list = ['Results', 'Contribution', 'Highlights', 'Background', 'Conclusions', 'Introduction', 'Motivation', 'Methods', 'Teaser',             'Abstracts', 'Conclusion', 'IMPORTANCE', 'SUMMARY', 'Finding', 'Availability', 'Highlight', 'Importance', 'Summary', 'RESULTS',             'Rationale', 'Aim', 'Significance', 'Objectives', 'Purpose', 'Synopsis', 'METHODS', 'SIGNIFICANCE', 'Objectives', 'Design',             'Objective', 'Approach', 'Methodology', 'HIGHLIGHTS', 'INTRODUCTION', 'Abstract', 'CONCLUSIONS', 'Software', 'Interpretations',             'FUNDING', 'Summery', 'Perspective', 'Discussion', 'CONCLUSION', 'DISCUSSION', 'Funding', 'Advances', 'Classification', 'SYNOPSIS',             'BACKGROUND', 'Method', 'Innovation', 'PREMISE', 'Implications', 'STATEMENT', 'Contact', 'Location', 'Outlook', 'TEASER',             'Interpretation', 'eTOC', 'Result', 'TABLE', 'Taxon', 'Measurements', 'Participants', 'Sentence', 'Materials', 'FIGURE',             'PURPOSE', 'Context', 'SUMMMARY', 'Hypothesis', 'Keypoitns', 'Implementation', 'Limitations', 'OBJECTIVE', 'Statement',             'Precis', 'Questions', 'Database', 'Paragraph', 'PARAGRAPH', 'DECLARATIONS', 'ABSTRACT', 'HIGHLIGHT', 'Application',              'OUTCOME', 'Paragraph', 'Premise', 'Cover', 'Rational', 'ARTICLE', 'SETTING', 'RESUMEN', 'Repositories', 'SAMENVATTING',              'Animals', 'Disclaimer', 'Impact', 'Procedures', 'Foreword', 'EXPOSURES', 'FINDINGS', 'OBJECTIVES', 'Backgroud', 'Assessment',               'DESIGN', 'ABSRTRACT', 'License', 'SUMARY', 'Conclusions', 'ABSRACT', 'Originality/Value', 'Conclusions/interpretation', 'Problem',               'PURPOSE/HYPOTHESIS', 'RATIONALE', 'PARTICIPANTS', 'ASSESSMENT', 'Recommendations', 'Meaning', 'METHOD', 'LIMITATIONS', 'Category',               'Abbreviations', 'IMPRTANCE', 'Methos', 'Details', 'Reproducibility', 'Conclussion', 'Disclosures', 'Recommendation', 'Outcomes',               'REPOSITORIES', 'RESUME', 'IMPACT', 'Availablity', 'Intervention', 'Notice', 'Resources', 'Setting', 'Synthesis', 'Digest',               'SUPPORT', 'Abtsract', 'MANUSCRIPT', 'Blurp', 'ABSTACT', 'KEYPOINTS', 'ABSTARCT', 'Authorship', 'ABTRAST', 'Scope', 'Intro']
+with open('utils/txt_header_markup/header_terms.txt') as f:
+    header_list = [line.rstrip() for line in f]
 
-markup_list =  ['C_LIO_LI', 'O_LI', 'C_TABLECAPTION', 'C_LI', 'C_TEXTBOX', 'O_QD', 'C_QD', 'C_ST_ABSO_LI', 'O_TEXTBOX', 'O_SCPCAP', 'C_SCPCAP', 'HIGHLIGHTSO_LI', 'HIGHLIGHTO_LI', 'O_LST', 'C_LST'] 
+with open('utils/txt_header_markup/markup_terms.txt') as f:
+    markup_list = [line.rstrip() for line in f]
 
-statement_list = ['AUTHOR STATEMENT', 'IMPACT STATEMENT', 'SIGNIFICANCE STATEMENT', 'DATA STATEMENT', 'ARTICLE SUMMARY', 'AUTHOR SUMMARY',                   'CONFLICT OF INTEREST', 'IN BRIEF', 'METHODOLOGY/PRINCIPAL FINDINGS', 'ABSTRACT AND KEYWORDS', 'PROGRAM SUMMARY',                   'ARTICLE SUMMARY', 'NEW & NOTEWORTHY', 'Graphical abstract', 'GRAPHICAL ABSTRACT', 'HIGHLIGHT STATEMENT', 'Funding Information',                   'SUMMARY STATEMENT', 'DATA SUMMARY', 'SUMMARY PARAGRAPH', 'One Sentence Summary', 'CONDENSED ABSTRACT', 'Sentence Summary', 'Software Availability',                  'Statement of Significance', 'Summary statement', 'Summary Paragraph', 'SUBMISSION CATEGORY', 'eTOC Summary', 'Impact Summary', 'Summary sentence',                  'Impact statement', 'Method of Study', 'STATISTICAL TESTS', 'Statistical Tests', 'STUDY TYPE', 'Summary Sentence', 'Significance statement',                  'LIMITATIONS, REASONS FOR CAUTION', 'WIDER IMPLICATIONS OF THE FINDINGS', 'STUDY FUNDINGS/COMPETING INTEREST(S)', 'EXPERIMENTAL APPROACH',                  'KEY RESULTS', 'CONCLUSIONS and IMPLICATIONS', 'BACKGROUND AND PURPOSE', 'AUTHORS SUMMARY', 'DESIGN SETTINGS AND PARTICIPANTS',                  'MAIN OUTCOME AND MEASURES', 'CONCLUSION AND RELEVANCE', 'STRUCTURED ABSTRACT INTRODUCTION', 'SIGNIFICANCE STATMENT', 'Summary Statement',                  'Abstract Importance', 'Conclusions /Significance', 'Methodology / principal finding', 'Back ground', 'Highlight Summary',                  'AVAILABILITY AND IMPLEMENTATION', 'Highlights statement', 'MPACT SUMMARY', 'BACKGROUND & OBJECTIVES', 'BACKGROUND AND HYPOTHESIS',                  'BACKGROUND & AIMS', 'ABSTRACT BACKGROUND & AIMS', 'APPROACH AND RESULTS', 'ABSTRACT  OBJECTIVES', 'eTOC BLURB', 'Author Summary',                  'STATEMENT OF SIGNIFICANCE', 'Software availability', 'eTOC Blurb', 'GRAPHICAL SUMMARY', 'RESEARCH IN CONTEXT', 'CONTRIBUTION TO THE FIELD',                  'TRANSLATIONAL PERSPECTIVE', 'COMPARISON WITH EXISTING METHODS', 'MATERIALS & METHODS', 'EXPERIMENTAL RESULTS', 'SCIENCE FOR SOCIETY',                  'Method Summary', 'RESOURCE SHARING', 'TOC Graphic', 'CLINICAL SIGNIFICANCE', 'ETHICAL STATEMENT', 'Significance Statement',                  'Impact Statement', 'Data Summary', 'SIGNIFICANCE STATEMENT', 'SIGNIFICANCE    STATEMENT', 'WORKING DRAFT', 'PARTICIPANTS/MATERIALS, SETTING, METHOD',                  'MAIN RESULTS AND THE ROLE OF CHANCE', 'SIGNIFICANCE  STATEMENT', 'MATERIALS AND METHODS', 'NOVELTY & IMPACT STATEMENT',                  'SIGNIFICANT STATEMENT']
+with open('utils/txt_header_markup/multi_header_terms.txt') as f:
+    statement_list = [line.rstrip() for line in f]
 
 markup_list.sort(key = len, reverse = True)
 header_list.sort(key = len, reverse = True)
@@ -140,17 +143,13 @@ for i, abstract in enumerate(abstract_list):
                 for header in header_list:
                     if header in word:
                         word = word.replace(header, '')               
-        if 'O_FIG' in word:
-            stop = 1
-        if 'O_TBL' in word:
+        if ('O_FIG' in word) or ('O_TBL' in word):
             stop = 1
         if stop == 0:
             new_words.append(word)
-        if 'C_FIG' in word:
-            stop = 0
-        if 'C_TBL' in word:
-            stop = 0        
-        if '\n' in word or 'C_FIG' in word or 'C_TBL' in word:
+        if ('C_FIG' in word) or ('C_TBL' in word):
+            stop = 0     
+        if ('\n' in word) or ('C_FIG' in word) or ('C_TBL' in word):
             pointer = 1
         else:
             pointer = 0
